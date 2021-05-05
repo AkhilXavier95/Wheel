@@ -9,6 +9,7 @@ import EmptyTaskList from "images/EmptyTaskList";
 import ListTasks from "./ListTasks";
 import UserDropDown from "./UserDropDown";
 import CreateNewTask from "./CreateNewTask";
+import DeleteModal from "./DeleteModal";
 
 const initialTasks = [
   {
@@ -48,8 +49,10 @@ const Tasks = () => {
   const [taskList, setTaskList] = useState(initialTasks);
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [singleTaskId, setSingleTaskId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showNewTaskPane, setShowNewTaskPane] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -77,7 +80,6 @@ const Tasks = () => {
   };
 
   const editClickAction = () => {};
-  const deleteClickAction = () => {};
 
   const createNewTask = values => {
     const { title, description, dueDate, showDueDate, tags } = values;
@@ -96,6 +98,29 @@ const Tasks = () => {
     setTaskList(cTaskList);
     setShowNewTaskPane(false);
     Toastr.success("The task has been successfully added.");
+  };
+
+  const deleteClickAction = id => {
+    setShowDeleteModal(true);
+    setSingleTaskId([id]);
+  };
+
+  const handleDelete = () => {
+    const cTaskList = [...taskList];
+    const deleteTasks = singleTaskId || selectedIds;
+    deleteTasks.forEach(taskId => {
+      const index = cTaskList.map(task => task.id).indexOf(taskId);
+      cTaskList.splice(index, 1);
+    });
+    setTaskList(cTaskList);
+    setSelectedIds([]);
+    onClose();
+    Toastr.success("The task was deleted successfully.");
+  };
+
+  const onClose = () => {
+    setShowDeleteModal(false);
+    setSingleTaskId(null);
   };
 
   if (loading) {
@@ -127,7 +152,7 @@ const Tasks = () => {
               clear: () => setSearchTerm(""),
             }}
             deleteButtonProps={{
-              onClick: () => {},
+              onClick: () => setShowDeleteModal(true),
               disabled: !selectedIds.length,
             }}
             paginationProps={{
@@ -158,7 +183,7 @@ const Tasks = () => {
           image={EmptyTaskList}
           title="Your task list is empty"
           subtitle=""
-          primaryAction={() => {}}
+          primaryAction={() => setShowNewTaskPane(true)}
           primaryActionLabel="New Task"
         />
       )}
@@ -167,6 +192,9 @@ const Tasks = () => {
         setShowPane={setShowNewTaskPane}
         createNewTask={createNewTask}
       />
+      {showDeleteModal && (
+        <DeleteModal onClose={onClose} handleDelete={handleDelete} />
+      )}
     </>
   );
 };

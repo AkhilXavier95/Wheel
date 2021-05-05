@@ -76,7 +76,11 @@ const ListTasks = ({
               <td>
                 <div className="flex">
                   {actionButton(editIcon, editClickAction, "Edit")}
-                  {actionButton(deleteIcon, deleteClickAction, "Delete")}
+                  {actionButton(
+                    deleteIcon,
+                    () => deleteClickAction(task.id),
+                    "Delete"
+                  )}
                 </div>
               </td>
             </tr>
