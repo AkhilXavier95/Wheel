@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 
-import { Badge, Checkbox, Tooltip } from "neetoui";
+import { Badge, Checkbox, Tooltip, Button } from "neetoui";
 
 import editIcon from "images/editIcon";
 import deleteIcon from "images/deleteIcon";
@@ -56,7 +56,12 @@ const ListTasks = ({
               </td>
               <td>
                 <div className="flex flex-row items-center justify-start text-purple-500">
-                  {task.title}
+                  <Button
+                    type="link"
+                    label={task.title}
+                    style="text"
+                    className="text-blue-600 text-sm"
+                  />
                 </div>
               </td>
               <td>{task.description}</td>
