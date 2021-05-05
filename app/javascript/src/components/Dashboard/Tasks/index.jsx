@@ -8,6 +8,7 @@ import EmptyState from "components/Common/EmptyState";
 import EmptyTaskList from "images/EmptyTaskList";
 
 import ListTasks from "./ListTasks";
+import UserDropDown from "./UserDropDown";
 
 const initialTasks = [
   {
@@ -96,7 +97,15 @@ const Tasks = () => {
       <PageHeading
         title="Tasks"
         rightButton={() => (
-          <Button onClick={() => {}} label="New task" icon="ri-add-line" />
+          <div className="flex">
+            <Button
+              onClick={() => {}}
+              label="New task"
+              icon="ri-add-line"
+              className="mr-2"
+            />
+            <UserDropDown />
+          </div>
         )}
       />
       {taskList.length > 0 ? (

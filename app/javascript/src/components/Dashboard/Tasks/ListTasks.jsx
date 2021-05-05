@@ -25,7 +25,7 @@ const ListTasks = ({
   );
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full px-28">
       <table className="nui-table nui-table--actions">
         <thead>
           <tr>
