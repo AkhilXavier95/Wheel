@@ -133,6 +133,7 @@ const Tasks = () => {
         title="Tasks"
         rightButton={() => (
           <div className="flex">
+            <Button style="icon" icon="ri-delete-bin-line" className="mr-2" />
             <Button
               onClick={() => setShowNewTaskPane(true)}
               label="New task"
