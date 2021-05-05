@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Button, PageLoader } from "neetoui";
+import { Button, PageLoader, Toastr } from "neetoui";
 import { PageHeading, SubHeader } from "neetoui/layouts";
 
 // import notesApi from "apis/notes";
@@ -9,6 +9,7 @@ import EmptyTaskList from "images/EmptyTaskList";
 
 import ListTasks from "./ListTasks";
 import UserDropDown from "./UserDropDown";
+import CreateNewTask from "./CreateNewTask";
 
 const initialTasks = [
   {
@@ -49,6 +50,7 @@ const Tasks = () => {
   const [taskList, setTaskList] = useState(initialTasks);
   const [selectedIds, setSelectedIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showNewTaskPane, setShowNewTaskPane] = useState(false);
 
   useEffect(() => {
     fetchNotes();
@@ -88,6 +90,25 @@ const Tasks = () => {
   const editClickAction = () => {};
   const deleteClickAction = () => {};
 
+  const createNewTask = values => {
+    const { title, description, dueDate, showDueDate, tags } = values;
+    const cTaskList = [...taskList];
+    const newTask = {
+      id: taskList.length + 1,
+      title,
+      description,
+      tag: tags.value,
+      createdDate: new Date(),
+    };
+    if (showDueDate) {
+      newTask.dueDate = new Date(dueDate);
+    }
+    cTaskList.push(newTask);
+    setTaskList(cTaskList);
+    setShowNewTaskPane(false);
+    Toastr.success("The task has been successfully added.");
+  };
+
   if (loading) {
     return <PageLoader />;
   }
@@ -99,7 +120,7 @@ const Tasks = () => {
         rightButton={() => (
           <div className="flex">
             <Button
-              onClick={() => {}}
+              onClick={() => setShowNewTaskPane(true)}
               label="New task"
               icon="ri-add-line"
               className="mr-2"
@@ -152,6 +173,11 @@ const Tasks = () => {
           primaryActionLabel="New Task"
         />
       )}
+      <CreateNewTask
+        showPane={showNewTaskPane}
+        setShowPane={setShowNewTaskPane}
+        createNewTask={createNewTask}
+      />
     </>
   );
 };
