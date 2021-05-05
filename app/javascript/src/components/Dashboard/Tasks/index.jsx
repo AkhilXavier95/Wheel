@@ -3,62 +3,30 @@ import React, { useState, useEffect } from "react";
 import { Button, PageLoader } from "neetoui";
 import { PageHeading, SubHeader } from "neetoui/layouts";
 
-// import notesApi from "apis/notes";
+import notesApi from "apis/notes";
 import EmptyState from "components/Common/EmptyState";
 import EmptyTaskList from "images/EmptyTaskList";
 
 import ListTasks from "./ListTasks";
 import UserDropDown from "./UserDropDown";
-
-const initialTasks = [
-  {
-    id: 1,
-    title: "task1",
-    description: "task1 description",
-    tag: "Internal",
-    createdDate: new Date(),
-    dueDate: new Date(),
-  },
-  {
-    id: 2,
-    title: "task2",
-    description: "task2 description",
-    tag: "Bug",
-    createdDate: new Date(),
-    dueDate: new Date(),
-  },
-  {
-    id: 3,
-    title: "task3",
-    description: "task3 description",
-    tag: "Workflow",
-    createdDate: new Date(),
-  },
-  {
-    id: 4,
-    title: "task4",
-    description: "task3 description",
-    tag: "Internal",
-    createdDate: new Date(),
-    dueDate: new Date(),
-  },
-];
+import CreateNewTask from "./CreateNewTask";
 
 const Tasks = () => {
   const [loading, setLoading] = useState(true);
-  const [taskList, setTaskList] = useState(initialTasks);
+  const [taskList, setTaskList] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showNewTaskPane, setShowNewTaskPane] = useState(false);
 
   useEffect(() => {
-    fetchNotes();
+    fetchTasks();
   }, []);
 
-  const fetchNotes = async () => {
+  const fetchTasks = async () => {
     try {
       setLoading(true);
-      // const response = await notesApi.fetch();
-      setTaskList(initialTasks);
+      const response = await notesApi.fetch();
+      setTaskList(response.data);
     } catch (error) {
       logger.error(error);
     } finally {
@@ -88,6 +56,26 @@ const Tasks = () => {
   const editClickAction = () => {};
   const deleteClickAction = () => {};
 
+  const createNewTask = async values => {
+    try {
+      const { dueDate, showDueDate, tags } = values;
+      const newTask = {
+        ...values,
+        tag: tags.value,
+        createdDate: new Date(),
+      };
+      if (showDueDate) {
+        newTask.dueDate = new Date(dueDate);
+      }
+      await notesApi.create(newTask);
+    } catch (err) {
+      logger.error(err);
+    } finally {
+      fetchTasks();
+      setShowNewTaskPane(false);
+    }
+  };
+
   if (loading) {
     return <PageLoader />;
   }
@@ -99,7 +87,7 @@ const Tasks = () => {
         rightButton={() => (
           <div className="flex">
             <Button
-              onClick={() => {}}
+              onClick={() => setShowNewTaskPane(true)}
               label="New task"
               icon="ri-add-line"
               className="mr-2"
@@ -152,6 +140,11 @@ const Tasks = () => {
           primaryActionLabel="New Task"
         />
       )}
+      <CreateNewTask
+        showPane={showNewTaskPane}
+        setShowPane={setShowNewTaskPane}
+        createNewTask={createNewTask}
+      />
     </>
   );
 };
