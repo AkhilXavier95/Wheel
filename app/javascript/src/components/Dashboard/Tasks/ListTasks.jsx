@@ -37,7 +37,7 @@ const ListTasks = ({
             </th>
             <th className="text-left text-gray-400">TITLE</th>
             <th className="text-left text-gray-400">DESCRIPTION</th>
-            <th className="text-left text-gray-400">TAGS</th>
+            <th className="text-center text-gray-400">TAGS</th>
             <th className="text-left text-gray-400">CREATED DATE</th>
             <th className="text-center text-gray-400">DUE DATE</th>
           </tr>
