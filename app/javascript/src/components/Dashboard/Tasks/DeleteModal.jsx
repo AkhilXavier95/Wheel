@@ -10,7 +10,7 @@ export default function DeleteAlert({ onClose, handleDelete }) {
       showFooter
       submitButtonProps={{
         style: "danger",
-        label: "Continue anyway",
+        label: "Delete",
         loading: false,
         onClick: handleDelete,
       }}
