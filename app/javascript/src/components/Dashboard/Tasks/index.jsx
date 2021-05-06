@@ -7,7 +7,6 @@ import EmptyState from "components/Common/EmptyState";
 import EmptyTaskList from "images/EmptyTaskList";
 
 import ListTasks from "./ListTasks";
-import UserDropDown from "./UserDropDown";
 import CreateNewTask from "./CreateNewTask";
 import DeleteModal from "./DeleteModal";
 
@@ -132,16 +131,12 @@ const Tasks = () => {
       <PageHeading
         title="Tasks"
         rightButton={() => (
-          <div className="flex">
-            <Button style="icon" icon="ri-delete-bin-line" className="mr-2" />
-            <Button
-              onClick={() => setShowNewTaskPane(true)}
-              label="New task"
-              icon="ri-add-line"
-              className="mr-2"
-            />
-            <UserDropDown />
-          </div>
+          <Button
+            onClick={() => setShowNewTaskPane(true)}
+            label="New task"
+            icon="ri-add-line"
+            className="mr-2"
+          />
         )}
       />
       {taskList.length > 0 ? (
